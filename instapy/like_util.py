@@ -625,6 +625,7 @@ def check_link(
     graphql = "items" in post_page
     location_name = None
 
+    first_comment = ""
     owner_comments = ""
 
     if graphql:
@@ -647,6 +648,7 @@ def check_link(
          if comments is not None:
             for comment in comments:
                 if comment["user"]["username"] == user_name:
+                    if first_comment == "": first_comment=comment["text"]
                     owner_comments = owner_comments + "\n" + comment["text"]
 
 >>>>>>> f023479 (Fix 'post_page[0]["shortcode_media"] KeyError: 0')
@@ -685,8 +687,9 @@ def check_link(
     elif owner_comments:
         image_text = image_text + "\n" + owner_comments
 
-    # If the image still has no description gets the first comment
+    # If the image still has no description. Get the first comment
     if image_text is None:
+<<<<<<< HEAD
         if graphql:
             media_edge_string = get_media_edge_comment_string(media)
 <<<<<<< HEAD
@@ -704,6 +707,10 @@ def check_link(
             image_text = media["comments"]
 >>>>>>> f023479 (Fix 'post_page[0]["shortcode_media"] KeyError: 0')
             image_text = image_text[0]["text"] if image_text else None
+=======
+        image_text = first_comment
+        logger.info("Image still no description. Get the first comment and use this as description")
+>>>>>>> cad38a1 (fix 'is_private' and 'check_link KeyError: None' crash)
 
     if image_text is None:
         image_text = "No description"
