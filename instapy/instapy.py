@@ -5958,7 +5958,7 @@ class InstaPy:
                 try:
                     web_address_navigator(self.browser, post_link)
                     sleep(2)
-                    time_element = self.browser.find_element(By.XPATH, "//div/a/time")
+                    time_element = self.browser.find_element(By.XPATH, "//div/a//time")
                     post_datetime_str = time_element.get_attribute("datetime")
                     post_datetime = datetime.strptime(
                         post_datetime_str, "%Y-%m-%dT%H:%M:%S.%fZ"
