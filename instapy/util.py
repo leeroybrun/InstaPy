@@ -514,9 +514,6 @@ def getMediaData(
     browser,
 ):
     additional_data = get_additional_data(browser)
-<<<<<<< HEAD
-    data = additional_data["graphql"]["shortcode_media"]
-=======
     #DEF: 20jan
     data = additional_data["items"][0]
    
@@ -526,7 +523,6 @@ def getMediaData(
     if query=="edge_media_to_parent_comment.count": query="comment_count"
     if query=="edge_media_preview_comment": query="preview_comments"
     if query=="edge_media_preview_comment.count": query="comment_count"
->>>>>>> f023479 (Fix 'post_page[0]["shortcode_media"] KeyError: 0')
 
     if query.find(".") == -1:
         data = data[query]

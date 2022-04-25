@@ -104,6 +104,7 @@ def comment_image(browser, username, comments, blacklist, logger, logfolder):
             # wait, to avoid crash
             sleep(2)
             # post comment / <enter>
+            #DEF: 20jan - added Keys.TAB
             (
                 ActionChains(browser)
                 .move_to_element(comment_input[0])

@@ -539,17 +539,8 @@ def get_links_for_username(
 
 def get_media_edge_comment_string(media):
     """AB test (Issue 3712) alters the string for media edge, this resolves it"""
-<<<<<<< HEAD
-<<<<<<< HEAD
-    options = ["edge_media_to_comment", "edge_media_preview_comment"]
-=======
-    #DEF: 20jan
-    options = ["comments", "preview_comments"]
->>>>>>> f023479 (Fix 'post_page[0]["shortcode_media"] KeyError: 0')
-=======
     #DEF: 26jan
     options = ["comments", "preview_comments", "edge_media_preview_comment"]
->>>>>>> f4a97be (IG data structure - try - except - catch)
     for option in options:
         try:
             media[option]
@@ -597,41 +588,7 @@ def check_link(
     if post_page is None:
         logger.warning("Unavailable Page: {}".format(post_link.encode("utf-8")))
         return True, None, None, "Unavailable Page", "Failure"
-<<<<<<< HEAD
-
-    # Gets the description of the post's link and checks for the dont_like tags
-<<<<<<< HEAD
-    graphql = "graphql" in post_page
-    location_name = None
-
-    if graphql:
-        media = post_page["graphql"]["shortcode_media"]
-        is_video = media["is_video"]
-        user_name = media["owner"]["username"]
-        image_text = media["edge_media_to_caption"]["edges"]
-        image_text = image_text[0]["node"]["text"] if image_text else None
-        location = media["location"]
-        location_name = location["name"] if location else None
-        media_edge_string = get_media_edge_comment_string(media)
-        # Gets all comments on media
-        comments = (
-            media[media_edge_string]["edges"]
-            if media[media_edge_string]["edges"]
-            else None
-        )
-        owner_comments = ""
-        # Concat all owner comments
-        if comments is not None:
-            for comment in comments:
-                if comment["node"]["owner"]["username"] == user_name:
-                    owner_comments = owner_comments + "\n" + comment["node"]["text"]
-
-=======
-    #DEF: 20jan
-    graphql = "items" in post_page
-=======
     
->>>>>>> f4a97be (IG data structure - try - except - catch)
     location_name = None
     is_video = None
     user_name = None
@@ -666,33 +623,6 @@ def check_link(
                         if first_comment == "": first_comment=comment["text"]
                         owner_comments = owner_comments + "\n" + comment["text"]
 
-<<<<<<< HEAD
->>>>>>> f023479 (Fix 'post_page[0]["shortcode_media"] KeyError: 0')
-    else:
-        #DEF: 22jan
-        logger.info("post_page: {}".format(post_page))
-        media = post_page["items"][0]
-        is_video = media["is_unified_video"]
-        user_name = media["user"]["username"]
-        image_text = media["caption"]
-        image_text = image_text["text"] if image_text else None
-        owner_comments = browser.execute_script(
-            """
-            latest_comments = window._sharedData.entry_data.PostPage[
-            0].media.comments.nodes;
-            if (latest_comments === undefined) {
-                latest_comments = Array();
-                owner_comments = latest_comments
-                    .filter(item => item.user.username == arguments[0])
-                    .map(item => item.text)
-                    .reduce((item, total) => item + '\\n' + total, '');
-                return owner_comments;}
-            else {
-                return null;}
-        """,
-            user_name,
-        )
-=======
         else:
             media = post_page["graphql"]["shortcode_media"]
             is_video = media["is_video"]
@@ -716,7 +646,6 @@ def check_link(
     except:
         logger.warning("Stopped... IG 'post_page' changed. This is the dump: {}".format(post_page))
         return True, None, None, "Unavailable Data", "Failure"
->>>>>>> f4a97be (IG data structure - try - except - catch)
 
     if owner_comments == "":
         owner_comments = None
@@ -730,19 +659,8 @@ def check_link(
 
     # If the image still has no description. Get the first comment
     if image_text is None:
-<<<<<<< HEAD
-        if graphql:
-            media_edge_string = get_media_edge_comment_string(media)
-<<<<<<< HEAD
-            image_text = media[media_edge_string]["edges"]
-            image_text = image_text[0]["node"]["text"] if image_text else None
-
-        else:
-            image_text = media["comments"]["nodes"]
-=======
-            #DEF: 20jan
-            image_text = media[media_edge_string]
-            image_text = image_text[0]["text"] if image_text else None
+        image_text = first_comment
+        logger.info("Image still no description. Get the first comment and use this as description")
 
         else:
             image_text = media["comments"]
@@ -856,17 +774,14 @@ def like_image(browser, username, blacklist, logger, logfolder, total_liked_img)
     # find first for like element
     like_elem = browser.find_elements(By.XPATH, like_xpath)
 
-<<<<<<< HEAD
-    if len(like_elem) == 1:
-=======
     #DEF: 20jan
     if len(like_elem) > 0:
->>>>>>> f023479 (Fix 'post_page[0]["shortcode_media"] KeyError: 0')
         # sleep real quick right before clicking the element
         sleep(2)
         logger.info("--> {}...".format(media))
 
         like_elem = browser.find_elements(By.XPATH, like_xpath)
+
         if len(like_elem) > 0:
             click_element(browser, like_elem[0])
         # check now we have unlike instead of like
