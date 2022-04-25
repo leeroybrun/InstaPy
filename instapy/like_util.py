@@ -663,15 +663,6 @@ def check_link(
         image_text = first_comment
         logger.info("Image still no description. Get the first comment and use this as description")
 
-        else:
-            image_text = media["comments"]
->>>>>>> f023479 (Fix 'post_page[0]["shortcode_media"] KeyError: 0')
-            image_text = image_text[0]["text"] if image_text else None
-=======
-        image_text = first_comment
-        logger.info("Image still no description. Get the first comment and use this as description")
->>>>>>> cad38a1 (fix 'is_private' and 'check_link KeyError: None' crash)
-
     if image_text is None:
         image_text = "No description"
 
@@ -1038,5 +1029,4 @@ from .constants import (
     MEDIA_PHOTO,
     MEDIA_VIDEO,
 )
-
 
